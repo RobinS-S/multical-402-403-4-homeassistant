@@ -28,7 +28,6 @@ optional arguments:
   --test_mqtt           Test the IR-MQTT interface
   --add_sensors_to_ha   Add E1 sensors to MQTT for discovery by Home Assistant, ALWAYS do this the first time you use this script
   --test_kamstrup       Test the IR interface of the Kamstrup and exit
-  --mqtt                Test the MQTT connection and exit
 
 Values are expected in the format: 'CommandNr'
 ```
