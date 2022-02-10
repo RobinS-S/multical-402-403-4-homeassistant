@@ -326,8 +326,6 @@ if __name__ == "__main__":
         "--add_sensors_to_ha", help="Add E1 sensors to MQTT for discovery by Home Assistant, ALWAYS do this the first time you use this script", action="store_true")
     parser.add_argument(
         "--test_kamstrup", help="Test the IR interface of the Kamstrup and exit", action="store_true")
-    parser.add_argument(
-        "--mqtt", help="Test the MQTT connection and exit ", action="store_true")
 
     # Kamstrup values to request
     parser.add_argument(
