@@ -100,20 +100,19 @@ multical_var_si = {                # Decimal Number in Command for Kamstrup Mult
 
 #######################################################################
 # Units, provided by Erik Jensen
-
 units = {
-    0: '', 1: 'Wh', 2: 'kWh', 3: 'MWh', 4: 'GWh', 5: 'j', 6: 'kj', 7: 'Mj',
-    8: 'Gj', 9: 'Cal', 10: 'kCal', 11: 'Mcal', 12: 'Gcal', 13: 'varh',
-    14: 'kvarh', 15: 'Mvarh', 16: 'Gvarh', 17: 'VAh', 18: 'kVAh',
-    19: 'MVAh', 20: 'GVAh', 21: 'kW', 22: 'kW', 23: 'MW', 24: 'GW',
-    25: 'kvar', 26: 'kvar', 27: 'Mvar', 28: 'Gvar', 29: 'VA', 30: 'kVA',
-    31: 'MVA', 32: 'GVA', 33: 'V', 34: 'A', 35: 'kV', 36: 'kA', 37: 'C',
-    38: 'K', 39: 'l', 40: 'm3', 41: 'l/h', 42: 'm3/h', 43: 'm3xC',
-    44: 'ton', 45: 'ton/h', 46: 'h', 47: 'hh:mm:ss', 48: 'yy:mm:dd',
-    49: 'yyyy:mm:dd', 50: 'mm:dd', 51: '', 52: 'bar', 53: 'RTC',
-    54: 'ASCII', 55: 'm3 x 10', 56: 'ton x 10', 57: 'GJ x 10',
-    58: 'minutes', 59: 'Bitfield', 60: 's', 61: 'ms', 62: 'days',
-    63: 'RTC-Q', 64: 'Datetime'
+    0: "", 1: "Wh", 2: "kWh", 3: "MWh", 4: "GWh", 5: "j", 6: "kj", 7: "Mj",
+    8: "Gj", 9: "Cal", 10: "kCal", 11: "Mcal", 12: "Gcal", 13: "varh",
+    14: "kvarh", 15: "Mvarh", 16: "Gvarh", 17: "VAh", 18: "kVAh",
+    19: "MVAh", 20: "GVAh", 21: "kW", 22: "kW", 23: "MW", 24: "GW",
+    25: "kvar", 26: "kvar", 27: "Mvar", 28: "Gvar", 29: "VA", 30: "kVA",
+    31: "MVA", 32: "GVA", 33: "V", 34: "A", 35: "kV", 36: "kA", 37: "C",
+    38: "K", 39: "l", 40: "m3", 41: "l/h", 42: "m3/h", 43: "m3xC",
+    44: "ton", 45: "ton/h", 46: "h", 47: "hh:mm:ss", 48: "yy:mm:dd",
+    49: "yyyy:mm:dd", 50: "mm:dd", 51: "", 52: "bar", 53: "RTC",
+    54: "ASCII", 55: "m3 x 10", 56: "ton x 10", 57: "GJ x 10",
+    58: "minutes", 59: "Bitfield", 60: "s", 61: "ms", 62: "days",
+    63: "RTC-Q", 64: "Datetime"
 }
 
 #######################################################################
@@ -149,8 +148,7 @@ escapes = {
 }
 
 #######################################################################
-# And here we go....
-#
+# Kamstrup communication class
 
 
 class kamstrup(object):
@@ -250,9 +248,9 @@ class kamstrup(object):
         return c[:-2]
 
     def readvar(self, nbr):
-        # I wouldn't be surprised if you can ask for more than
+        # I wouldn"t be surprised if you can ask for more than
         # one variable at the time, given that the length is
-        # encoded in the response.  Havn't tried.
+        # encoded in the response.  Havn"t tried.
 
         self.send(0x80, (0x3f, 0x10, 0x01, nbr >> 8, nbr & 0xff))
 
@@ -304,14 +302,11 @@ class kamstrup(object):
 
 if __name__ == "__main__":
 
-    import time
     import argparse
     import os
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
-                                     epilog="""Values are expected in the format:
-   "CommandNr"
-"""
-                                     )
+                                     epilog="Values are expected in the format: 'CommandNr'")
+
     parser.add_argument("-d", "--device", type=str,
                         help="Device to use. Example: /dev/ttyUSB0", required=True)
     # MQTT
@@ -333,8 +328,10 @@ if __name__ == "__main__":
         "--test_kamstrup", help="Test the IR interface of the Kamstrup and exit", action="store_true")
     parser.add_argument(
         "--mqtt", help="Test the MQTT connection and exit ", action="store_true")
+
+    # Kamstrup values to request
     parser.add_argument(
-        "values", type=str, help="CommandNr", nargs='*')
+        "values", type=str, help="CommandNr", nargs="*")
 
     args = parser.parse_args()
 
@@ -343,16 +340,19 @@ if __name__ == "__main__":
         print("Error! Failed to locate specified device: %s, example: /dev/ttyUSB0" %
               (args.device))
         sys.exit(1)
+
     for value in args.values:
         if not value.isnumeric():
             print(
                 "Error! Your values are not in numeric format. Example: 60 80. Find these in the script.")
             sys.exit(1)
+
     if not (args.test_kamstrup or args.test_mqtt or args.add_sensors_to_ha) and len(args.values) == 0:
         print("This script needs values to do something! Check --help to see how it works!")
         sys.exit()
 
     print("=======================================================================================")
+
     if args.add_sensors_to_ha:
         mqttclient = mqtt.Client(client_id="multical")
         mqttclient.username_pw_set(args.mqtt_user, args.mqtt_pass)
@@ -360,9 +360,9 @@ if __name__ == "__main__":
         try:
             mqttclient.connect(args.mqtt_ip, int(args.mqtt_port))
         except:
-            print('Error! Could not connect to MQTT broker')
+            print("Error! Could not connect to MQTT broker")
         try:
-            mqttclient.publish('homeassistant/sensor/E1HeatEnergy/config',
+            mqttclient.publish("homeassistant/sensor/E1HeatEnergy/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/HeatEnergy(E1)",
                                    "name": "Heat Energy (E1)",
@@ -374,7 +374,7 @@ if __name__ == "__main__":
                                    "schema": "json"
                                })
                                )
-            mqttclient.publish('homeassistant/sensor/E1Power/config',
+            mqttclient.publish("homeassistant/sensor/E1Power/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Power",
                                    "name": "Power (E1)",
@@ -386,7 +386,7 @@ if __name__ == "__main__":
                                    "schema": "json"
                                })
                                )
-            mqttclient.publish('homeassistant/sensor/E1Temp1/config',
+            mqttclient.publish("homeassistant/sensor/E1Temp1/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Temp1",
                                    "name": "Temp 1 (E1)",
@@ -398,7 +398,7 @@ if __name__ == "__main__":
                                    "schema": "json"
                                })
                                )
-            mqttclient.publish('homeassistant/sensor/E1Temp2/config',
+            mqttclient.publish("homeassistant/sensor/E1Temp2/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Temp2",
                                    "name": "Temp 2 (E1)",
@@ -410,7 +410,7 @@ if __name__ == "__main__":
                                    "schema": "json"
                                })
                                )
-            mqttclient.publish('homeassistant/sensor/E1Flow/config',
+            mqttclient.publish("homeassistant/sensor/E1Flow/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Flow",
                                    "name": "Flow (E1)",
@@ -422,7 +422,7 @@ if __name__ == "__main__":
                                    "schema": "json"
                                })
                                )
-            mqttclient.publish('homeassistant/sensor/E1Volume/config',
+            mqttclient.publish("homeassistant/sensor/E1Volume/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Volume",
                                    "name": "Volume (E1)",
@@ -438,7 +438,7 @@ if __name__ == "__main__":
                 "Added sensors to Home Assistant MQTT topics! Autodetection should occur.")
         except:
             print(
-                'Error! Could not publish device configuration to homeassistant/sensor, check ACL!')
+                "Error! Could not publish device configuration to homeassistant/sensor, check ACL!")
 
     else:
         device = kamstrup(args.device)
@@ -456,15 +456,15 @@ if __name__ == "__main__":
             try:
                 mqttclient.connect(args.mqtt_ip, int(args.mqtt_port))
             except:
-                print('Error! Could not connect to MQTT broker')
+                print("Error! Could not connect to MQTT broker")
             for i in kamstrup_402_var:
                 x, u = device.readvar(i)
                 print("CommandNr %4i: %-25s" % (i, kamstrup_402_var[i]), x, u)
                 try:
                     mqttclient.publish(
-                        args.mqtt_topic + '/' + kamstrup_402_var[i].replace(" ", ""), json.dumps({"value": x, "unit": u}))
+                        args.mqtt_topic + "/" + kamstrup_402_var[i].replace(" ", ""), json.dumps({"value": x, "unit": u}))
                 except:
-                    print('Error! Could not publish MQTTT value')
+                    print("Error! Could not publish MQTTT value")
             sys.exit()
 
         if args.test_kamstrup:
@@ -481,7 +481,7 @@ if args.mqtt_ip:
     try:
         mqttclient.connect(args.mqtt_ip, int(args.mqtt_port))
     except:
-        print('Error! Could not connect to MQTT broker')
+        print("Error! Could not connect to MQTT broker")
 
 if args.values:
     print("---------------------------------------------------------------------------------------")
@@ -504,9 +504,9 @@ if args.values:
                 if args.mqtt_ip:
                     try:
                         mqttclient.publish(
-                            args.mqtt_topic + '/' + kamstrup_402_var[i].replace(" ", ""), json.dumps({"value": x, "unit": u}))
+                            args.mqtt_topic + "/" + kamstrup_402_var[i].replace(" ", ""), json.dumps({"value": x, "unit": u}))
                     except:
-                        print('Error! Could not publish MQTT value')
+                        print("Error! Could not publish MQTT value")
     if args.mqtt_ip:
         print("Sensor values published to MQTT %s/#" % args.mqtt_topic)
     print("---------------------------------------------------------------------------------------")
