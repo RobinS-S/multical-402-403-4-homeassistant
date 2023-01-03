@@ -371,7 +371,7 @@ if __name__ == "__main__":
                                    "state_class": "total",
                                    "schema": "json"
                                })
-                               )
+                               , 0, True)
             mqttclient.publish("homeassistant/sensor/E1Power/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Power",
@@ -383,7 +383,7 @@ if __name__ == "__main__":
                                    "state_class": "measurement",
                                    "schema": "json"
                                })
-                               )
+                               , 0, True)
             mqttclient.publish("homeassistant/sensor/E1Temp1/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Temp1",
@@ -407,7 +407,7 @@ if __name__ == "__main__":
                                    "state_class": "measurement",
                                    "schema": "json"
                                })
-                               )
+                               , 0, True)
             mqttclient.publish("homeassistant/sensor/E1Flow/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Flow",
@@ -419,7 +419,7 @@ if __name__ == "__main__":
                                    "state_class": "measurement",
                                    "schema": "json"
                                })
-                               )
+                               , 0, True)
             mqttclient.publish("homeassistant/sensor/E1Volume/config",
                                json.dumps({
                                    "state_topic": args.mqtt_topic + "/Volume",
@@ -431,7 +431,7 @@ if __name__ == "__main__":
                                    "state_class": "total",
                                    "schema": "json"
                                })
-                               )
+                               , 0, True)
             print(
                 "Added sensors to Home Assistant MQTT topics! Autodetection should occur.")
         except:
